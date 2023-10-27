@@ -190,6 +190,7 @@ class ConstantLengthDataset(IterableDataset):
 
 
 def create_datasets(tokenizer, args):
+    print(f"ATENCAO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  {args.data_column}")
     dataset = load_dataset(
         args.dataset_name,
         data_dir=args.subset,
