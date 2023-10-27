@@ -122,7 +122,6 @@ def print_trainable_parameters(model):
 
 def prepare_sample_text(example, data_column="content"):
     """Prepare the text from a sample of the dataset."""
-    print(example)
     text = f"{example[data_column]}"
     return text
 
@@ -190,7 +189,6 @@ class ConstantLengthDataset(IterableDataset):
 
 
 def create_datasets(tokenizer, args):
-    print(f"ATENCAO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  {args.data_column}")
     dataset = load_dataset(
         args.dataset_name,
         data_dir=args.subset,
@@ -302,6 +300,7 @@ def main(args):
 
 if __name__ == "__main__":
     args = get_args()
+    args.data_column = args.data_column.strip()
 
     set_seed(args.seed)
     os.makedirs(args.output_dir, exist_ok=True)
