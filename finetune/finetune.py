@@ -122,6 +122,7 @@ def print_trainable_parameters(model):
 
 def prepare_sample_text(example, data_column="content"):
     """Prepare the text from a sample of the dataset."""
+    print(example)
     text = f"{example[data_column]}"
     return text
 
