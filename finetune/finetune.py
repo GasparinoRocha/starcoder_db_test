@@ -2,7 +2,7 @@ import argparse
 import os
 
 import torch
-from accelerate import Accelerator
+from accelerate import Accelerator, init_empty_weights, load_checkpoint_and_dispatch
 from datasets import load_dataset
 from peft import LoraConfig, get_peft_model, prepare_model_for_int8_training, set_peft_model_state_dict
 from torch.utils.data import IterableDataset
@@ -231,14 +231,25 @@ def create_datasets(tokenizer, args):
 
 def run_training(args, train_data, val_data):
     print("Loading the model")
+
+    checkpoint = "/scratch/dberendsen/fine_tune_starcoder/starcoder"
+    config = AutoConfig.from_pretrained(checkpoint)
+
+    with init_empty_weights():
+        model = AutoModelForCausalLM.from_config(config)
+
+    model.tie_weights()
+
+    model = load_checkpoint_and_dispatch(model, "starcoder", device_map="auto", no_split_module_classes=["GPTJBlock"])
+    
     # disable caching mechanism when using gradient checkpointing
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model_path,
-        use_auth_token=True,
-        use_cache=not args.no_gradient_checkpointing,
-        load_in_8bit=True,
-        device_map={"": Accelerator().process_index},
-    )
+    # model = AutoModelForCausalLM.from_pretrained(
+    #     args.model_path,
+    #     use_auth_token=True,
+    #     use_cache=not args.no_gradient_checkpointing,
+    #     load_in_8bit=True,
+    #     device_map={"": Accelerator().process_index},
+    # )
     model = prepare_model_for_int8_training(model)
 
     lora_config = LoraConfig(
