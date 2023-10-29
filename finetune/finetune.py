@@ -232,24 +232,24 @@ def create_datasets(tokenizer, args):
 def run_training(args, train_data, val_data):
     print("Loading the model")
 
-    checkpoint = "/scratch/dberendsen/fine_tune_starcoder/starcoder"
-    config = AutoConfig.from_pretrained(checkpoint)
+    # checkpoint = "/scratch/dberendsen/fine_tune_starcoder/starcoder"
+    # config = AutoConfig.from_pretrained(checkpoint)
 
-    with init_empty_weights():
-        model = AutoModelForCausalLM.from_config(config)
+    # with init_empty_weights():
+    #     model = AutoModelForCausalLM.from_config(config)
 
-    model.tie_weights()
+    # model.tie_weights()
 
-    model = load_checkpoint_and_dispatch(model, "starcoder", device_map="auto", no_split_module_classes=["GPTJBlock"])
+    # model = load_checkpoint_and_dispatch(model, "starcoder", device_map="auto", no_split_module_classes=["GPTJBlock"])
     
-    # disable caching mechanism when using gradient checkpointing
-    # model = AutoModelForCausalLM.from_pretrained(
-    #     args.model_path,
-    #     use_auth_token=True,
-    #     use_cache=not args.no_gradient_checkpointing,
-    #     load_in_8bit=True,
-    #     device_map={"": Accelerator().process_index},
-    # )
+    disable caching mechanism when using gradient checkpointing
+    model = AutoModelForCausalLM.from_pretrained(
+        args.model_path,
+        use_auth_token=True,
+        use_cache=not args.no_gradient_checkpointing,
+        load_in_8bit=True,
+        device_map="auto"
+    )
     model = prepare_model_for_int8_training(model)
 
     lora_config = LoraConfig(
