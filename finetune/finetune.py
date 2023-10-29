@@ -242,7 +242,7 @@ def run_training(args, train_data, val_data):
 
     # model = load_checkpoint_and_dispatch(model, "starcoder", device_map="auto", no_split_module_classes=["GPTJBlock"])
     
-    disable caching mechanism when using gradient checkpointing
+    # disable caching mechanism when using gradient checkpointing
     model = AutoModelForCausalLM.from_pretrained(
         args.model_path,
         use_auth_token=True,
