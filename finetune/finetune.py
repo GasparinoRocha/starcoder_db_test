@@ -232,13 +232,13 @@ def create_datasets(tokenizer, args):
 def run_training(args, train_data, val_data):
     print("Loading the model")
     # disable caching mechanism when using gradient checkpointing
-    device = torch.device('cpu')
+    # device = torch.device('cpu')
     model = AutoModelForCausalLM.from_pretrained(
         args.model_path,
         use_auth_token=True,
         use_cache=not args.no_gradient_checkpointing,
         load_in_8bit=False,
-        device=device
+        device_map="auto"
     )
     model = prepare_model_for_int8_training(model)
 
