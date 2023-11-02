@@ -237,7 +237,7 @@ def run_training(args, train_data, val_data):
         args.model_path,
         use_auth_token=True,
         use_cache=not args.no_gradient_checkpointing,
-        load_in_8bit=True,
+        load_in_8bit=False,
         device=device
     )
     model = prepare_model_for_int8_training(model)
